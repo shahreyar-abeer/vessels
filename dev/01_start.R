@@ -15,12 +15,12 @@
 ## Add meta data about your application
 golem::fill_desc(
   pkg_name = "vessels", # The Name of the package containing the App 
-  pkg_title = "PKG_TITLE", # The Title of the package containing the App 
-  pkg_description = "PKG_DESC.", # The Description of the package containing the App 
-  author_first_name = "AUTHOR_FIRST", # Your First Name
-  author_last_name = "AUTHOR_LAST", # Your Last Name
-  author_email = "AUTHOR@MAIL.COM", # Your Email
-  repo_url = NULL # The URL of the GitHub Repo (optional) 
+  pkg_title = "Vessels: Appsilon test task", # The Title of the package containing the App 
+  pkg_description = "Shiny Developer recruitment task @Appsilon - 2020.", # The Description of the package containing the App 
+  author_first_name = "Zauad Shahreer", # Your First Name
+  author_last_name = "Abeer", # Your Last Name
+  author_email = "shahreyar.abeer@gmail.com", # Your Email
+  repo_url = "https://github.com/shahreyar-abeer/vessels.git" # The URL of the GitHub Repo (optional) 
 )     
 
 ## Set {golem} options ----
