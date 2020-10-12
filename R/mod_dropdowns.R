@@ -23,7 +23,7 @@ mod_dropdowns_ui <- function(id){
                 dropdown_input(
                   input_id = ns("type"),
                   default_text = "Vessel Type",
-                  choices = unique(vessels::ships2$ship_type),
+                  choices = unique(ships2$ship_type),
                   value = "Cargo"
                 )
             ),
@@ -62,7 +62,7 @@ mod_dropdowns_server <- function(id, r){
         update_dropdown_input(
           session = session,
           input_id = "ship",
-          choices = unique(vessels::ships2[ship_type == input$type][, SHIPNAME]),
+          choices = unique(ships2[ship_type == input$type][, SHIPNAME]),
           value = "PINTA"
         )
       })
@@ -72,7 +72,7 @@ mod_dropdowns_server <- function(id, r){
         r$ship <- input$ship
         #print(r$ship)
         req(r$ship)
-        r$max_data <- get_max_data(vessels::ships2, r$ship)
+        r$max_data <- get_max_data(ships2, r$ship)
         #r$max_data <- distances[which.max(distance), ]
         #print(r$max_data)
       })

@@ -10,4 +10,4 @@ to_keep <- c("LAT", "LON", "SHIPNAME", "ship_type", "ELAPSED", "SPEED", "DATETIM
 
 ships2 <- ships[, ..to_keep][order(ship_type, SHIPNAME, DATETIME)]
 
-usethis::use_data(ships2, overwrite = TRUE)
+usethis::use_data(ships2, internal = TRUE, overwrite = TRUE)

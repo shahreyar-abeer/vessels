@@ -30,7 +30,7 @@ app_server <- function( input, output, session ) {
   })
   
   output$details <- renderReactable({
-    vessels::ships2[SHIPNAME == r$ship, .(SHIPNAME, SHIPTYPE = ship_type, LENGTH, FLAG, WIDTH)][1] %>% 
+    ships2[SHIPNAME == r$ship, .(SHIPNAME, SHIPTYPE = ship_type, LENGTH, FLAG, WIDTH)][1] %>% 
       reactable(
         sortable = FALSE,
         compact = TRUE,
