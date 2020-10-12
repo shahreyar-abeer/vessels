@@ -23,5 +23,3 @@ devtools::install_github("shahreyar-abeer/vessels")
 # run
 vessels::run_app()
 ```
-
-\*Note: It may note work yet.
