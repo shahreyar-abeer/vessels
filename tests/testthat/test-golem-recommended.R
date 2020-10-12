@@ -8,7 +8,6 @@ test_that("app server", {
   expect_is(server, "function")
 })
 
-# Configure this test to fit your need
 test_that(
   "app launches",{
     skip_if_not(interactive())
