@@ -15,7 +15,7 @@ app_ui <- function(request) {
           
         h1(class = "ui header", style = "color:#aaa",
           div(class = "content",
-            "Vessels: a couple of entry points"
+            "Vessels: An entry point"
           ),
           div(class = "content", style = "float:right;",
             tags$img(src = "https://raw.githubusercontent.com/rstudio/hex-stickers/4a66b3c2f37423aa2139ecd2123b3066895a8c98/SVG/shiny.svg",
