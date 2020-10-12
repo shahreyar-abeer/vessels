@@ -14,7 +14,8 @@ mod_dropdowns_ui <- function(id){
   tagList(
     
     div(class = "ui grid",
-        div(class = "three column row",
+        div(class = "four column row",
+            div(class = "column"),
             div(class = "column",
                 div(class = "header",
                   "Select vessel type"
@@ -66,7 +67,13 @@ mod_dropdowns_server <- function(id, r){
       })
       
       observeEvent(input$ship, {
+        
         r$ship <- input$ship
+        print(r$ship)
+        req(r$ship)
+        r$max_data <- get_max_data(vessels::ships2, r$ship)
+        #r$max_data <- distances[which.max(distance), ]
+        print(r$max_data)
       })
       
     }
