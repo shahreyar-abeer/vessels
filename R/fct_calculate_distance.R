@@ -5,37 +5,37 @@
 #' @param ship_name 
 #'
 #' @import data.table
+#' @importFrom sf st_point st_sfc st_distance
 #'
 #' @return
 #' @export
 
-calculate_distance <- function(r, ship_name) {
-  #ships <- r$ships
-  #ships <- r
-  #ships2 <- ships[, ..to_keep]
-  print(colnames(r))
-  print(is.data.table(r))
-  data <- ships2[SHIPNAME == "KAROLI"]
-  data <- data[, x := .I]
-  #ships3 <- ships3[, x := .I]
-  
-  #ships3 <- ships2[1:3,]
-  
-  data <- data[, .(LAT, LON, to = .(st_point(c(LON, LAT)))), by = x]
-  
-  
-  data <- data[, from := c(to[1], to[1:(.N-1)])]
-  
-  
-  data <- data[, distance := calc_sf_dist(from[[1]], to[[1]]), by = x]
-  
-  data <- data[, .(LAT, LON, from, to, distance)]
-  #ships5 <- ships4[, .(from2 = st_point(from)), by = x]
+get_max_data <- function(data, ship_name) {
+
+  data <- data[SHIPNAME == ship_name][, x := .I]
+  data <- data[, .(LAT, LON, DATETIME, this_point = .(st_point(c(LON, LAT)))), by = x]
+  data <- data[, prev_point := c(this_point[1], this_point[1:(.N-1)])]
+  data <- data[, this_date := DATETIME][, previous_date := c(this_date[1], this_date[1:(.N-1)])]
+  data <- data[, time_diff := difftime(this_date, previous_date, units = "mins")]
+  data <- data[time_diff > 100, prev_point := NA ] # a time diff of greater that 100 mins is regarded as not-consecutive
+  max_distance_list <- calculate_max_distance(data)
+  data <- data[max_distance_list$index][, distance := max_distance_list$value]
+  data <- data[, .(LAT, LON, DATETIME, prev_point, this_point, distance)]
   data
 }
 
 
-calc_sf_dist <- function(x, y) {
-  s <- st_sfc(x, y, crs = 4326)
-  max(st_distance(s))
+calculate_max_distance <- function(data) {
+  sf_geometry <- st_sfc(data$prev_point, crs = 4326)
+  distance_matrix <- st_distance(sf_geometry)
+  
+  ## get the values of consecutive rows only in the upper triangle of the matrix
+  distances <- distance_matrix[col(distance_matrix) - row(distance_matrix) == 1]
+  
+  list(
+    index = which.max(distances),
+    value = max(distances, na.rm = TRUE)
+  )
 }
+
+
