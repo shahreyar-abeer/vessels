@@ -62,7 +62,7 @@ mod_dropdowns_server <- function(id, r){
         update_dropdown_input(
           session = session,
           input_id = "ship",
-          choices = unique(vessels::ships2$SHIPNAME[ships2$ship_type == input$type]),
+          choices = unique(vessels::ships2[ship_type == input$type][, SHIPNAME]),
           value = "PINTA"
         )
       })
