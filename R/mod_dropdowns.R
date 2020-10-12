@@ -6,7 +6,7 @@
 #'
 #' @noRd 
 #'
-#' @importFrom shiny NS tagList 
+#' @importFrom shiny NS tagList div
 #' @importFrom shiny.semantic dropdown_input update_dropdown_input
 #' @import data.table
 mod_dropdowns_ui <- function(id){
@@ -48,6 +48,7 @@ mod_dropdowns_ui <- function(id){
 #' dropdowns Server Function
 #' 
 #' @import data.table
+#' @importFrom shiny moduleServer observeEvent
 #'
 #' @noRd 
 mod_dropdowns_server <- function(id, r){
@@ -69,11 +70,11 @@ mod_dropdowns_server <- function(id, r){
       observeEvent(input$ship, {
         
         r$ship <- input$ship
-        print(r$ship)
+        #print(r$ship)
         req(r$ship)
         r$max_data <- get_max_data(vessels::ships2, r$ship)
         #r$max_data <- distances[which.max(distance), ]
-        print(r$max_data)
+        #print(r$max_data)
       })
       
     }

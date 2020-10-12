@@ -4,8 +4,8 @@
 #'
 #' @param id,input,output,session Internal parameters for {shiny}.
 #' 
-#' @import leaflet
-#' @importFrom data.table fcase
+#' @importFrom shiny NS tagList
+#' @importFrom leaflet leafletOutput
 #' 
 #'
 #' @noRd 
@@ -22,6 +22,7 @@ mod_map_ui <- function(id){
 #' 
 #' @import leaflet
 #' @importFrom data.table fcase
+#' @importFrom shiny moduleServer
 #'
 #' @noRd 
 mod_map_server <- function(id, r){
@@ -42,14 +43,14 @@ mod_map_server <- function(id, r){
         y2 <- r$max_data$this_point[[1]][2]
         
         
-        icon1 = leaflet::awesomeIcons(
+        icon1 = awesomeIcons(
           icon = "ship",
           iconColor = "#ffffff",
           library = "fa",
           markerColor = "cadetblue"
         )
         
-        icon2 = leaflet::awesomeIcons(
+        icon2 = awesomeIcons(
           icon = "anchor",
           iconColor = "#ffffff",
           library = "fa",
@@ -61,7 +62,7 @@ mod_map_server <- function(id, r){
         
         leaflet(ships2) %>% 
           addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
-          setView(lng = (x1+x2)/2, lat = (y1+y2)/2, zoom = 10) %>% 
+          setView(lng = (x1+x2)/2, lat = (y1+y2)/2, zoom = 12) %>% 
           addAwesomeMarkers(lng = x1, lat = y1, popup = text1,
                             icon = icon1) %>% 
           addAwesomeMarkers(lng = x2, lat = y2, popup = text2,
