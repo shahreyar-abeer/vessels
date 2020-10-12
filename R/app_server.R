@@ -1,10 +1,11 @@
 #' The application server-side
 #' 
 #' @param input,output,session Internal parameters for {shiny}. 
-#'     DO NOT REMOVE.
-#' @import shiny
+#' 
+#' @importFrom shiny reactiveValues HTML h4 req renderUI
 #' @import data.table
 #' @importFrom reactable reactable renderReactable
+#' 
 #' @noRd
 app_server <- function( input, output, session ) {
   # List the first level callModules here
@@ -17,28 +18,26 @@ app_server <- function( input, output, session ) {
   mod_dropdowns_server("drops", r)
   mod_map_server("map", r)
   
-  # observeEvent(r$ship, {
-  #   req(r$ship)
-  #   print(r$ship)
-  #   data <- vessels::ships2
-  #   r$max_data <- get_max_data(data, r$ship)
-  #   #r$max_data <- distances[which.max(distance), ]
-  #   print(r$max_data)
-  # })
-  
-  output$note <- renderText({
+  output$note <- renderUI({
     req(r$max_data)
-    paste0(r$ship, "'s longest run was of ", round(r$max_data$distance, 1), " metres.")
+    header <- paste0(round(r$max_data$distance, 1), " metres.")
+    HTML(paste0(h4(header)))
   })
   
-  output$vessel <- renderText({
+  output$vessel <- renderUI({
     req(r$ship)
-    paste0("Vessel: ", r$ship)
+    HTML(paste0(icon("ship"), " Vessel: ", r$ship))
   })
   
   output$details <- renderReactable({
-    ships2[SHIPNAME == r$ship, .(SHIPNAME, SHIP_TYPE = ship_type, LENGTH, FLAG, WIDTH)][1] %>% 
-      reactable()
+    ships2[SHIPNAME == r$ship, .(SHIPNAME, SHIPTYPE = ship_type, LENGTH, FLAG, WIDTH)][1] %>% 
+      reactable(
+        sortable = FALSE,
+        compact = TRUE,
+        bordered = TRUE,
+        highlight = TRUE,
+        striped = TRUE
+      )
   })
   
 }
