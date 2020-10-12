@@ -8,12 +8,11 @@ Imports:
     config,
     golem,
     shiny,
-    processx,
-    attempt,
-    DT,
-    glue,
-    htmltools,
-    data.table
+    data.table,
+    shiny.semantic,
+    sf,
+    leaflet,
+    gt
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
