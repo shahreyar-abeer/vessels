@@ -60,7 +60,7 @@ mod_map_server <- function(id, r){
         text1 <- paste0(r$ship, "'s longest run started here.")
         text2 <- paste0(r$ship, "'s longest run ended here.")
         
-        leaflet(ships2) %>% 
+        leaflet(r$data) %>% 
           addProviderTiles(providers$Esri.WorldGrayCanvas) %>%
           setView(lng = (x1+x2)/2, lat = (y1+y2)/2, zoom = 12) %>% 
           addAwesomeMarkers(lng = x1, lat = y1, popup = text1,

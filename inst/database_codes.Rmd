@@ -1,0 +1,62 @@
+---
+title: "PostgreSQL codes"
+author: "Zauad Shahreer Abeer"
+date: "9/30/2021"
+output: html_document
+---
+
+### Codes to add the data to the PostgreSQL database
+
+
+```{r}
+
+## loading the data
+
+ships <- data.table::fread("../../Documents/ships_data/ships.csv")
+
+ships <- ships[, DATETIME := as.POSIXct(DATETIME)]
+
+ships_to_keep = sample(ships2$SHIPNAME, 10)
+columns_to_keep <- c("LAT", "LON", "SHIPNAME", "ship_type", "ELAPSED", "SPEED", "DATETIME",
+             "LENGTH", "FLAG", "WIDTH")
+
+ships_filtered <- ships[SHIPNAME == ships_to_keep, ..columns_to_keep][order(ship_type, SHIPNAME, DATETIME)]
+
+
+```
+
+
+
+```{r}
+library(RPostgreSQL)
+
+## the connection
+con = DBI::dbConnect(
+        drv = RPostgreSQL::PostgreSQL(),
+        user = "lrpdgiby",
+        password = password,
+        host = "raja.db.elephantsql.com",
+        port = 5432,
+        dbname = "lrpdgiby"
+      )
+
+## this function creates a new empty table with the columns of the supplied df
+createEmptyTable <- function(con, table_name ,df) {
+  sql <- paste0("create table \"", table_name ,"\" (",paste0(collapse=',','"',names(df),'" ',sapply(df[0,],postgresqlDataType)),");");
+  dbSendQuery(con, sql);
+  invisible();
+};
+
+createEmptyTable(con, "vessels", ships_filtered)
+
+## write the rows of the data to the database
+dbWriteTable(con, "vessels", value = ships_filtered, overwrite = T, append = F, row.names = FALSE)
+
+```
+
+```{r}
+## fetching the data
+
+DBI::dbGetQuery(con, "SELECT * FROM vessels")
+```
+

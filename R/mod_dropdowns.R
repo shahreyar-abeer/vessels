@@ -23,8 +23,7 @@ mod_dropdowns_ui <- function(id){
                 dropdown_input(
                   input_id = ns("type"),
                   default_text = "Vessel Type",
-                  choices = unique(ships2$ship_type),
-                  value = "Cargo"
+                  choices = NULL
                 )
             ),
             div(class = "column",
@@ -58,21 +57,30 @@ mod_dropdowns_server <- function(id, r){
     function(input, output, session) {
       ns <- session$ns
       
+      observeEvent(r$data, {
+        req(r$data)
+        update_dropdown_input(
+          session = session,
+          input_id = "type",
+          choices = unique(r$data$ship_type)
+        )
+      })
+      
       observeEvent(input$type, {
+        req(r$data)
         update_dropdown_input(
           session = session,
           input_id = "ship",
-          choices = unique(ships2[ship_type == input$type][, SHIPNAME]),
-          value = "PINTA"
+          choices = unique(r$data[ship_type == input$type][, SHIPNAME])
         )
       })
       
       observeEvent(input$ship, {
-        
+        req(r$data)
         r$ship <- input$ship
         #print(r$ship)
         req(r$ship)
-        r$max_data <- get_max_data(ships2, r$ship)
+        r$max_data <- get_max_data(r$data, r$ship)
         #r$max_data <- distances[which.max(distance), ]
         #print(r$max_data)
       })
