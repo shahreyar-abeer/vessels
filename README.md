@@ -13,6 +13,10 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://github.com/shahreyar-abeer/vessels/workflows/R-CMD-check/badge.svg)](https://github.com/shahreyar-abeer/vessels/actions)
 <!-- badges: end -->
 
+An app that shows the starting and ending positions of a ship in a Leafler map.
+It also uses the spatial data to calculate the longest run between two time points.
+The data is saved in a PostgreSQL table and it reads from there.
+
 ## Installation
 
 You can install the development version from
