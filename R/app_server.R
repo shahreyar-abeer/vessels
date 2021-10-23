@@ -8,49 +8,54 @@
 #' 
 #' @noRd
 app_server <- function( input, output, session ) {
-  # List the first level callModules here
   
+  ## the reactiveValues object that can be called from within the modules
   r <- reactiveValues(
-    ship = NULL,
+    selected_vessel = NULL,
     data = NULL,
     max_data = NULL
   )
   
-  con = DBI::dbConnect(
-    drv = RPostgreSQL::PostgreSQL(),
-    user = "lrpdgiby",
-    password = "l8tPNicx_0pEk-HbwgmVa39XqJgHURrx",
-    host = "raja.db.elephantsql.com",
-    port = 5432,
-    dbname = "lrpdgiby"
-  )
-  
-  shiny::onStop(function() {
-    DBI::dbDisconnect(con)
-  })
-  
-  observeEvent(con, {
-    r$data = DBI::dbGetQuery(con, "SELECT * FROM vessels") %>% data.table::data.table()
-    print(r$data)
-  })
-  
+  ## calling the module server functions
   mod_dropdowns_server("drops", r)
   mod_map_server("map", r)
   
+  ## reading the data, keep only columns required
+  to_keep <- c("LAT", "LON", "SHIPNAME", "ship_type", "SPEED", "DATETIME", "LENGTH", "FLAG", "WIDTH")
+  data = read_data(path = "inst/ships_04112020/ships.csv", to_keep = to_keep)
+  
+  print(str(data))
+  
+  observeEvent(data, {
+    r$data = data
+  })
+  
+  ## once the vessel is selected, calculate the distances and get the maximum distance.
+  observeEvent(r$selected_vessel, {
+    req(r$data, r$selected_vessel)
+    
+    ## calculate the max distance
+    df = r$data[SHIPNAME == r$selected_vessel & ship_type == r$selected_type]
+    r$max_data <- get_max_data(df)
+  })
+  
+  ## the note
   output$note <- renderUI({
     req(r$max_data)
-    header <- paste0(round(r$max_data$distance, 1), " metres.")
+    header <- paste0(round(r$max_data$distances[1], 1), " metres.")
     HTML(paste0(h4(header)))
   })
   
+  ## the name of the vessel
   output$vessel <- renderUI({
-    req(r$ship)
-    HTML(paste0(icon("ship"), " Vessel: ", r$ship))
+    req(r$selected_vessel)
+    HTML(paste0(icon("ship"), " Vessel: ", r$selected_vessel))
   })
   
+  ## the details of the selected vessel
   output$details <- renderReactable({
-    req(r$data, r$ship)
-    r$data[SHIPNAME == r$ship, .(SHIPNAME, SHIPTYPE = ship_type, LENGTH, FLAG, WIDTH)][1] %>% 
+    req(r$data, r$selected_vessel)
+    r$data[SHIPNAME == r$selected_vessel & ship_type == r$selected_type, .(SHIPNAME, SHIPTYPE = ship_type, LENGTH, FLAG, WIDTH)][1] %>% 
       reactable(
         sortable = FALSE,
         compact = TRUE,

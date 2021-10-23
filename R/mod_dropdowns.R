@@ -18,21 +18,21 @@ mod_dropdowns_ui <- function(id){
             div(class = "column"),
             div(class = "column",
                 div(class = "header",
-                  "Select vessel type"
+                  "Vessel type"
                 ),
                 dropdown_input(
-                  input_id = ns("type"),
-                  default_text = "Vessel Type",
+                  input_id = ns("selected_type"),
+                  default_text = "Select Vessel Type",
                   choices = NULL
                 )
             ),
             div(class = "column",
               div(class = "header",
-                "Select vessel name"
+                "Vessel name"
               ),
               dropdown_input(
-                input_id = ns("ship"),
-                default_text = "Vessel name, choose a type first",
+                input_id = ns("selected_vessel"),
+                default_text = "Select Vessel Name",
                 choices = NULL
               )
             )
@@ -61,28 +61,24 @@ mod_dropdowns_server <- function(id, r){
         req(r$data)
         update_dropdown_input(
           session = session,
-          input_id = "type",
+          input_id = "selected_type",
           choices = unique(r$data$ship_type)
         )
       })
       
-      observeEvent(input$type, {
+      observeEvent(input$selected_type, {
         req(r$data)
         update_dropdown_input(
           session = session,
-          input_id = "ship",
-          choices = unique(r$data[ship_type == input$type][, SHIPNAME])
+          input_id = "selected_vessel",
+          choices = unique(r$data[ship_type == input$selected_type][, SHIPNAME])
         )
+        r$selected_type = input$selected_type
       })
       
-      observeEvent(input$ship, {
+      observeEvent(input$selected_vessel, {
         req(r$data)
-        r$ship <- input$ship
-        #print(r$ship)
-        req(r$ship)
-        r$max_data <- get_max_data(r$data, r$ship)
-        #r$max_data <- distances[which.max(distance), ]
-        #print(r$max_data)
+        r$selected_vessel <- input$selected_vessel
       })
       
     }
