@@ -14,8 +14,7 @@ status](https://github.com/shahreyar-abeer/vessels/workflows/R-CMD-check/badge.s
 <!-- badges: end -->
 
 An app that shows the starting and ending positions of a ship in a Leaflet map.
-It also uses the spatial data to calculate the longest run between two time points.
-The data is saved in a PostgreSQL table and it reads from there.
+It also uses the spatial data to calculate the longest run between two time points using `geosphere` package.
 
 ## Installation
 
