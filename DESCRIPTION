@@ -20,7 +20,6 @@ Imports:
     golem,
     leaflet,
     reactable,
-    sf,
     shiny,
     shiny.semantic,
     waiter
