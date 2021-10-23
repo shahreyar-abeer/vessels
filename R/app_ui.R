@@ -15,7 +15,7 @@ app_ui <- function(request) {
           
         h1(class = "ui header", style = "color:#aaa",
           div(class = "content",
-            "Vessels: An entry point"
+            "Vessel Tales"
           ),
           div(class = "content", style = "float:right;",
             tags$img(src = "https://raw.githubusercontent.com/rstudio/hex-stickers/4a66b3c2f37423aa2139ecd2123b3066895a8c98/SVG/shiny.svg",
@@ -79,6 +79,11 @@ golem_add_external_resources <- function(){
     bundle_resources(
       path = app_sys('app/www'),
       app_title = 'vessels'
+    ),
+    waiter::useWaiter(),
+    waiter::waiterOnBusy(
+      html = div(style = "color: #333", waiter::spin_loaders(38, "#333"), h5("Loading...")),
+      color = waiter::transparent(.3)
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert() 
