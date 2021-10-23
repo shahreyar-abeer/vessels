@@ -1,28 +1,33 @@
 Package: vessels
 Title: Vessels: Appsilon test task
 Version: 0.0.0.9000
-Authors@R: person('Zauad Shahreer', 'Abeer', email = 'shahreyar.abeer@gmail.com', role = c('cre', 'aut'))
+Authors@R: 
+    person(given = "Zauad Shahreer",
+           family = "Abeer",
+           role = c("cre", "aut"),
+           email = "shahreyar.abeer@gmail.com")
 Description: Shiny Developer recruitment task @Appsilon - 2020.
 License: Apache License (>= 2.0)
-Imports: 
-    config,
-    golem,
-    shiny,
-    data.table (>= 1.13.0),
-    shiny.semantic,
-    sf,
-    leaflet,
-    reactable,
-    pkgload,
-    lwgeom
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.1
 URL: https://github.com/shahreyar-abeer/vessels.git
 BugReports: https://github.com/shahreyar-abeer/vessels.git/issues
-Suggests: 
-    testthat,
-    spelling
-Language: en-US
 Depends: 
     R (>= 2.10)
+Imports: 
+    config,
+    data.table (>= 1.13.0),
+    geosphere,
+    glue,
+    golem,
+    leaflet,
+    reactable,
+    sf,
+    shiny,
+    shiny.semantic,
+    waiter
+Suggests: 
+    spelling,
+    testthat
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+RoxygenNote: 7.1.1
