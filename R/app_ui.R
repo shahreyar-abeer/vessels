@@ -11,13 +11,19 @@ app_ui <- function(request) {
     semanticPage(
       title = "Vessels",
       
+      uiOutput("modal"),
+      
       div(class = "ui container", style = "width:1127px;",
           
         h1(class = "ui header", style = "color:#aaa",
           div(class = "content",
             "Vessel Tales"
           ),
-          div(class = "content", style = "float:right;",
+          div(class = "content", style = "float:right; display: flex; gap: 20px",
+            div(
+              id = "about",
+              icon("info circle", style = "box-shadow: none; font-size: 41px; padding-top: 29px; cursor: pointer;")
+            ),
             tags$img(src = "https://raw.githubusercontent.com/rstudio/hex-stickers/4a66b3c2f37423aa2139ecd2123b3066895a8c98/SVG/shiny.svg",
                      width = "60px")
           )
@@ -80,6 +86,7 @@ golem_add_external_resources <- function(){
       path = app_sys('app/www'),
       app_title = 'vessels'
     ),
+    shinyjs::useShinyjs(),
     waiter::useWaiter(),
     waiter::waiterOnBusy(
       html = div(style = "color: #333", waiter::spin_loaders(38, "#333"), h5("Loading...")),

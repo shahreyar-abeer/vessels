@@ -5,6 +5,7 @@
 #' @importFrom shiny reactiveValues HTML h4 req renderUI
 #' @import data.table
 #' @importFrom reactable reactable renderReactable
+#' @importFrom shinyjs onclick
 #' 
 #' @noRd
 app_server <- function( input, output, session ) {
@@ -15,6 +16,54 @@ app_server <- function( input, output, session ) {
     data = NULL,
     max_data = NULL
   )
+  
+  observe({
+    shinyjs::click("about")
+  })
+  
+  shinyjs::onclick("about", {
+    show_modal("info_modal")
+  })
+  
+  output$modal = renderUI({
+    modal(
+      id = "info_modal",
+      header = "About the app",
+      content = tagList(
+        "This app is a visualization of Marine data (",
+        tags$a(
+          "read more",
+          href = "https://www.marinetraffic.com/blog/information-transmitted-via-ais-signal/",
+          target = "_blank"
+        ),
+        ")",
+        br(),
+        br(),
+        "The user can select a vessel type and a vessel of the corresponding type.",
+        br(),
+        "The map shows the ship's starting and ending point when it sailed the longest distance between two consecutive observations.",
+        br(),
+        "There is a short note below the map that shows how much the ship has sailed along with some info about the ship.",
+        br(),
+        br(),
+        "Here is a small snippet of the actual data",
+        br(),
+        br(),
+        head(r$data) %>%
+          gt::gt() %>%
+          gt::tab_options(
+          table.font.size = gt::px(12)
+        )
+        
+      ),
+      footer = actionButton("hide_modal", "Done"),
+    )
+  })
+  
+  observeEvent(input$hide_modal, {
+    hide_modal("info_modal")
+  })
+  
   
   ## calling the module server functions
   mod_dropdowns_server("drops", r)
